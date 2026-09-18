@@ -1,7 +1,7 @@
 databases:
   - name: samundra-postgres
     databaseName: samundra_drishti
-    user: postgres
+    user: samundra_admin # Valid non-reserved user name
     plan: free
     region: oregon
 
@@ -13,13 +13,9 @@ services:
     name: samundra-drishti-portal
     env: static
     plan: free
-    region: oregon
+    # Note: 'region' omitted because Render serves static sites on their Global CDN
     buildCommand: ""
     staticPublishPath: ./
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
 
   # =======================================================
   # 2. BACKEND: FASTAPI CLOUD API
