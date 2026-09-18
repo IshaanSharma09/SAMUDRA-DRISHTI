@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Navy background -->
+  <rect width="32" height="32" rx="5" fill="#0B1E3D"/>
+  <!-- Radar / Ashoka Chakra circle -->
+  <circle cx="16" cy="13" r="5" stroke="#FFFFFF" stroke-width="1.6" fill="none" opacity="0.90"/>
+  <!-- Center dot -->
+  <circle cx="16" cy="13" r="1.2" fill="#FFFFFF" opacity="0.90"/>
+  <!-- Antenna line -->
+  <line x1="16" y1="4" x2="16" y2="8" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- Maritime wave — primary -->
+  <path d="M5 20 C7.5 17.5 9.5 17 12 18 S15.5 20 18 19 S22 17 26 18.5"
+        stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.88"/>
+  <!-- Maritime wave — secondary -->
+  <path d="M5 23.5 C7.5 21 9.5 20.5 12 21.5 S15.5 23.5 18 22.5 S22 20.5 26 22"
+        stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.48"/>
+  <!-- Saffron accent bar (Kesari) -->
+  <rect x="0" y="28.5" width="32" height="3.5" rx="0" fill="#FF6A00"/>
+</svg>

@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Flash prevention — must run before any CSS paint -->
+  <script>
+    (function(){
+      try {
+        var t = localStorage.getItem('sd-theme');
+        if (t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+      } catch(e){}
+    })();
+  </script>
+  <title>Samudra Drishti System – Live Map</title>
+  <meta name="description" content="Samudra Drishti live maritime tracking map over India and the Indian Ocean." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!--
+    Leaflet from jsDelivr (most reliable CDN globally).
+    NO integrity hashes — these can silently block loading if the hash
+    doesn't match the served bytes due to CDN edge-caching differences.
+  -->
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <!-- Project Stylesheets -->
+  <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    /* ══════════════════════════════════════════════════════
+       SCOPED MAP-PAGE LAYOUT  — highest specificity wins
+       ══════════════════════════════════════════════════════ */
+    html, body { height: 100%; margin: 0; }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .map-page-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 2rem 0 !important;
+      gap: 14px;
+    }
+
+    /* CONTAINER — explicit pixel/vh height so Leaflet never sees zero */
+    #map-container {
+      flex: 1 1 auto;
+      position: relative;
+      width: 100%;
+      height: 70vh;          /* explicit viewport height */
+      min-height: 480px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #D1D9E6;
+      box-shadow: 0 4px 24px rgba(11,21,40,0.10);
+      background: #c8dff0;   /* ocean-blue placeholder while tiles load */
+    }
+
+    /* MAP DIV — absolute-fill its positioned parent */
+    #map {
+      position: absolute !important;
+      top: 0 !important; left: 0 !important;
+      right: 0 !important; bottom: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 1;
+    }
+
+    /* ── Floating status chip ── */
+    #map-status-chip {
+      position: absolute;
+      top: 14px; right: 14px;
+      z-index: 1000;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(6px);
+      border: 1px solid #E2E8F0;
+      border-radius: 20px;
+      padding: 6px 14px 6px 10px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #475569;
+      pointer-events: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: background 0.3s;
+    }
+    #map-status-chip .chip-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      flex-shrink: 0;
+      animation: chipPulse 2s ease-in-out infinite;
+    }
+    #map-status-chip.loading .chip-dot { background: #f59e0b; }
+    #map-status-chip.error   .chip-dot { background: #ef4444; animation: none; }
+    @keyframes chipPulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:0.45; transform:scale(1.3); }
+    }
+
+    /* ── Vessel count badge (top-left) ── */
+    #vessel-count-badge {
+      position: absolute;
+      top: 14px; left: 14px;
+      z-index: 1000;
+      background: rgba(11,21,40,0.88);
+      backdrop-filter: blur(6px);
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      pointer-events: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #vessel-count-badge .vc-label { color: #94a3b8; font-weight: 500; }
+    #vessel-count-badge .vc-num   { color: #fff; font-size: 14px; font-variant-numeric: tabular-nums; }
+
+    /* ── Loading spinner overlay ── */
+    #map-loader {
+      position: absolute;
+      inset: 0;
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(200,223,240,0.55);
+      backdrop-filter: blur(2px);
+      gap: 14px;
+      pointer-events: none;
+      transition: opacity 0.5s;
+    }
+    #map-loader.hidden { opacity: 0; pointer-events: none; }
+    .loader-spinner {
+      width: 40px; height: 40px;
+      border: 3px solid rgba(11,21,40,0.15);
+      border-top-color: #0B1528;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader-text {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #0B1528;
+    }
+
+    /* ── Timelag bar ── */
+    .timelag-bar {
+      flex-shrink: 0;
+      background: #F8FAFC;
+      border-top: 1px solid #E2E8F0;
+      padding: 12px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .timelag-label { font-size:13px; font-weight:600; color:#334155; white-space:nowrap; }
+    .timelag-slider { flex:1; max-width:420px; accent-color:#0B1528; height:4px; cursor:pointer; }
+    .timelag-value  { font-size:13px; font-weight:700; font-family:'JetBrains Mono',monospace; color:#0B1528; min-width:58px; }
+    .timelag-hint   { font-size:11.5px; color:#94a3b8; margin-left:auto; }
+
+    /* ── Custom Leaflet popup ── */
+    .leaflet-popup-content-wrapper {
+      border-radius: 10px !important;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+    }
+    .leaflet-popup-content { margin: 14px 16px !important; font-size: 13px !important; line-height: 1.6 !important; }
+    .vessel-popup-name { font-size: 15px; font-weight: 700; color: #0B1528; margin-bottom: 8px; }
+    .vessel-popup-row  { display:flex; justify-content:space-between; gap:16px; color:#475569; }
+    .vessel-popup-row strong { color:#334155; }
+    .vessel-popup-badge {
+      display: inline-flex; align-items:center; gap:5px;
+      background: #f0fdf4; border:1px solid #bbf7d0;
+      color: #15803d; font-size:11px; font-weight:600;
+      padding:2px 8px; border-radius:20px; margin-top:8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── SITE HEADER ── -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <div class="header-brand">
+        <img src="emblem.png" alt="Government of India Emblem" class="gov-emblem" />
+        <div class="brand-divider" aria-hidden="true"></div>
+        <div class="brand-text">
+          <span class="brand-title" id="main-title">Samudra Drishti</span>
+          <span class="brand-sub">National Maritime Surveillance System</span>
+        </div>
+      </div>
+
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="index.html"   class="nav-link">Dashboard</a>
+        <a href="map.html"     class="nav-link nav-active" aria-current="page">Live Map</a>
+        <a href="reports.html" class="nav-link">Reports</a>
+      </nav>
+
+      <div class="header-actions">
+        <div id="google_translate_element"></div>
+
+        <!-- Dark / Light mode toggle -->
+        <button
+          id="theme-toggle"
+          class="theme-toggle-btn"
+          type="button"
+          aria-label="Switch to Dark Mode"
+          title="Switch to Dark Mode"
+        >
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        </button>
+
+        <div class="status-pill">
+          <span class="pill-badge pill-operational"><span class="pill-dot"></span>Operational</span>
+        </div>
+      </div>
+    </div>
+    <!-- Indian tricolor accent strip -->
+    <div class="tricolor-strip" aria-hidden="true">
+      <div class="tc-s"></div>
+      <div class="tc-w"></div>
+      <div class="tc-g"></div>
+    </div>
+  </header>
+
+  <!-- ── PAGE CONTENT ── -->
+  <main class="page-main map-page-main" id="main-content">
+
+    <!-- Title row -->
+    <div class="page-top" style="margin-bottom:0;">
+      <div>
+        <h1 class="page-title">Live Maritime Map</h1>
+        <p class="page-sub">Indian EEZ &amp; Maritime Zones — Real-time surveillance grid</p>
+      </div>
+      <div class="page-top-right">
+        <span class="data-source-badge" id="ais-badge">AIS stream: Awaiting data</span>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         LEAFLET MAP CONTAINER
+         This div MUST be empty — Leaflet injects its
+         own canvas / SVG layers directly into it.
+         Overlays are absolute-positioned siblings.
+         ══════════════════════════════════════════════ -->
+    <div id="map-container" role="application" aria-label="Interactive maritime surveillance map centred on India">
+
+      <!-- The Leaflet canvas target (empty!) -->
+      <div id="map"></div>
+
+      <!-- Loading spinner (visible until first tile loads) -->
+      <div id="map-loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">Loading map tiles…</div>
+      </div>
+
+      <!-- Vessel count — top left -->
+      <div id="vessel-count-badge" aria-live="polite">
+        <span class="vc-label">Vessels tracked</span>
+        <span class="vc-num" id="vessel-count">0</span>
+      </div>
+
+      <!-- Status chip — top right -->
+      <div id="map-status-chip" class="loading">
+        <span class="chip-dot"></span>
+        <span id="chip-text">Loading tiles…</span>
+      </div>
+
+    </div>
+
+    <!-- ── TIME LAG SLIDER ── -->
+    <div class="timelag-bar">
+      <label class="timelag-label" for="timelag-slider">Time Lag (Hours):</label>
+      <input
+        type="range"
+        id="timelag-slider"
+        class="timelag-slider"
+        min="-48" max="24" value="0" step="1"
+        aria-label="Time lag in hours, from -48 (hindcast) to +24 (forecast)"
+        aria-valuemin="-48" aria-valuemax="24" aria-valuenow="0"
+      />
+      <span class="timelag-value" id="timelag-display" aria-live="polite">0h (Live)</span>
+      <span class="timelag-hint">← Hindcast &nbsp;&nbsp; Live &nbsp;&nbsp; Forecast →</span>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <span class="footer-left">
+        <strong>Samudra Drishti System</strong> &nbsp;|&nbsp; INCOIS, Ministry of Earth Sciences &nbsp;|&nbsp; Hosted by <strong>NIC</strong>
+      </span>
+      <nav class="footer-links" aria-label="Legal links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+      </nav>
+      <span class="footer-right">
+        <span class="footer-classification">Restricted</span>
+        &nbsp; Government of India
+      </span>
+    </div>
+  </footer>
+
+  <script src="shared.js"></script>
+
+  <script>
+  /* ════════════════════════════════════════════════════════════
+     SAMUDRA DRISHTI — MARITIME MAP ENGINE
+     ════════════════════════════════════════════════════════════ */
+  (function () {
+    'use strict';
+
+    /* ── DOM refs ── */
+    var loader     = document.getElementById('map-loader');
+    var chip       = document.getElementById('map-status-chip');
+    var chipText   = document.getElementById('chip-text');
+    var vcNum      = document.getElementById('vessel-count');
+    var aisBadge   = document.getElementById('ais-badge');
+
+    /* ── Tile provider catalogue (tried in order on failure) ── */
+    var TILES = [
+      {
+        /* CartoDB Voyager — looks like Google Maps, extremely reliable */
+        url:  'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+        attr: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        sub:  'abcd',
+        max:  20,
+        name: 'CartoDB Voyager'
+      },
+      {
+        /* OpenStreetMap standard — universal fallback */
+        url:  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        attr: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        sub:  'abc',
+        max:  19,
+        name: 'OpenStreetMap'
+      },
+      {
+        /* CartoDB Light — if voyager is unavailable */
+        url:  'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        attr: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        sub:  'abcd',
+        max:  20,
+        name: 'CartoDB Light'
+      }
+    ];
+
+    var tileIndex    = 0;
+    var currentLayer = null;
+    var map          = null;
+
+    /* ── Vessel marker store  {mmsi: L.marker} ── */
+    var vesselMarkers = {};
+    var vesselCount   = 0;
+
+    /* ── Custom vessel icon ── */
+    function makeVesselIcon (color, heading) {
+      color = color || '#0B1528';
+      var svgSize = 28;
+      var svg = [
+        '<svg xmlns="http://www.w3.org/2000/svg" width="' + svgSize + '" height="' + svgSize + '" viewBox="0 0 28 28">',
+        '  <g transform="rotate(' + (heading || 0) + ' 14 14)">',
+        '    <polygon points="14,2 20,22 14,18 8,22" fill="' + color + '" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>',
+        '  </g>',
+        '</svg>'
+      ].join('');
+      return L.divIcon({
+        html: svg,
+        className: '',
+        iconSize:   [svgSize, svgSize],
+        iconAnchor: [svgSize / 2, svgSize / 2],
+        popupAnchor:[0, -svgSize / 2]
+      });
+    }
+
+    /* ── Build popup HTML for a vessel ── */
+    function vesselPopup (v) {
+      return [
+        '<div class="vessel-popup-name">',
+          (v.name || 'Unknown Vessel'),
+        '</div>',
+        '<div class="vessel-popup-row"><span>MMSI</span><strong>' + (v.mmsi  || '—') + '</strong></div>',
+        '<div class="vessel-popup-row"><span>Flag</span><strong>'  + (v.flag  || '—') + '</strong></div>',
+        '<div class="vessel-popup-row"><span>Speed</span><strong>' + (v.speed !== undefined ? v.speed + ' kn' : '—') + '</strong></div>',
+        '<div class="vessel-popup-row"><span>Course</span><strong>'+ (v.course!== undefined ? v.course + '°'  : '—') + '</strong></div>',
+        '<div class="vessel-popup-row"><span>Position</span><strong>' + v.lat.toFixed(4) + ', ' + v.lon.toFixed(4) + '</strong></div>',
+        '<div><span class="vessel-popup-badge">● AIS Tracked</span></div>'
+      ].join('');
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       PUBLIC API — call these from your data-ingestion scripts
+       ══════════════════════════════════════════════════════════
+
+       window.maritime.addVessel(v)    — add or update a vessel
+         v = {
+           mmsi   : '123456789',   // unique ID
+           name   : 'MV Example',
+           lat    : 12.5,
+           lon    : 74.8,
+           heading: 45,            // degrees (0–360), optional
+           speed  : 8.4,           // knots, optional
+           course : 47,            // degrees, optional
+           flag   : 'India',       // optional
+           type   : 'cargo'        // 'cargo'|'tanker'|'fishing'|'suspect'|'other'
+         }
+
+       window.maritime.removeVessel(mmsi)  — remove a vessel by MMSI
+       window.maritime.clearVessels()      — remove all vessels
+       window.maritime.getMap()            — returns the L.map instance
+    ══════════════════════════════════════════════════════════ */
+
+    var TYPE_COLORS = {
+      cargo:   '#2563eb',
+      tanker:  '#7c3aed',
+      fishing: '#16a34a',
+      suspect: '#dc2626',
+      other:   '#0B1528'
+    };
+
+    window.maritime = {
+      addVessel: function (v) {
+        if (!map || v.lat === undefined || v.lon === undefined) return;
+        var color  = TYPE_COLORS[v.type] || TYPE_COLORS.other;
+        var icon   = makeVesselIcon(color, v.heading || 0);
+        var latlng = [v.lat, v.lon];
+
+        if (vesselMarkers[v.mmsi]) {
+          vesselMarkers[v.mmsi]
+            .setLatLng(latlng)
+            .setIcon(icon)
+            .setPopupContent(vesselPopup(v));
+        } else {
+          var marker = L.marker(latlng, { icon: icon, title: v.name || v.mmsi })
+            .addTo(map)
+            .bindPopup(vesselPopup(v), { maxWidth: 260 });
+          vesselMarkers[v.mmsi] = marker;
+          vesselCount++;
+          vcNum.textContent = vesselCount;
+          aisBadge.textContent = 'AIS stream: ' + vesselCount + ' vessel' + (vesselCount !== 1 ? 's' : '') + ' live';
+        }
+      },
+
+      removeVessel: function (mmsi) {
+        if (!vesselMarkers[mmsi]) return;
+        map.removeLayer(vesselMarkers[mmsi]);
+        delete vesselMarkers[mmsi];
+        vesselCount = Math.max(0, vesselCount - 1);
+        vcNum.textContent = vesselCount;
+      },
+
+      clearVessels: function () {
+        Object.keys(vesselMarkers).forEach(function (mmsi) {
+          map.removeLayer(vesselMarkers[mmsi]);
+        });
+        vesselMarkers = {};
+        vesselCount   = 0;
+        vcNum.textContent = '0';
+        aisBadge.textContent = 'AIS stream: Awaiting data';
+      },
+
+      getMap: function () { return map; }
+    };
+
+    /* ── Tile layer loader with automatic fallback ── */
+    function loadTileLayer (idx) {
+      if (idx >= TILES.length) {
+        setStatus('error', 'All tile servers unreachable');
+        return;
+      }
+      var t = TILES[idx];
+      setStatus('loading', 'Loading ' + t.name + '…');
+
+      if (currentLayer) { map.removeLayer(currentLayer); }
+
+      currentLayer = L.tileLayer(t.url, {
+        attribution: t.attr,
+        subdomains:  t.sub,
+        maxZoom:     t.max,
+        minZoom:     3,
+        crossOrigin: true,
+        keepBuffer:  4
+      });
+
+      /* Listen for first successful tile load */
+      currentLayer.once('tileload', function () {
+        hideLoader();
+        setStatus('ok', 'Baseline Grid Ready · Awaiting live SAR & AIS feeds');
+      });
+
+      /* On error, try next provider */
+      currentLayer.once('tileerror', function () {
+        loadTileLayer(idx + 1);
+      });
+
+      currentLayer.addTo(map);
+    }
+
+    function setStatus (state, text) {
+      chip.className = state;         /* drives colour via CSS */
+      chipText.textContent = text;
+    }
+
+    function hideLoader () {
+      if (loader) {
+        loader.classList.add('hidden');
+        setTimeout(function () { if (loader) loader.style.display = 'none'; }, 600);
+      }
+    }
+
+    /* ── Initialise Leaflet ── */
+    function initMap () {
+      if (map) return;      /* guard against double init */
+
+      /* Create map — centre on India */
+      map = L.map('map', {
+        center:           [22.0, 79.0],
+        zoom:             5,
+        zoomControl:      true,
+        scrollWheelZoom:  true,
+        doubleClickZoom:  true,
+        attributionControl: true
+      });
+
+      /* Load tile layer starting from index 0 */
+      loadTileLayer(0);
+
+      /* Force Leaflet to recalculate tile grid after font/CSS paint */
+      function flush () { if (map) map.invalidateSize({ pan: false }); }
+      flush();
+      [100, 250, 500, 1000, 2000].forEach(function (ms) { setTimeout(flush, ms); });
+      window.addEventListener('resize', flush);
+    }
+
+    /* ── Boot after DOM is ready ── */
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initMap);
+    } else {
+      initMap();
+    }
+    window.addEventListener('load', function () {
+      if (!map) initMap();
+      else if (map) map.invalidateSize({ pan: false });
+    });
+
+    /* ── Time-lag slider ── */
+    function initSlider () {
+      var slider  = document.getElementById('timelag-slider');
+      var display = document.getElementById('timelag-display');
+      if (!slider) return;
+      function fmt(v) {
+        var n = parseInt(v, 10);
+        return n === 0 ? '0h (Live)' : (n < 0 ? n + 'h' : '+' + n + 'h');
+      }
+      function update () {
+        var v = parseInt(slider.value, 10);
+        display.textContent = fmt(v);
+        slider.setAttribute('aria-valuenow',  v);
+        slider.setAttribute('aria-valuetext', fmt(v));
+      }
+      slider.addEventListener('input', update);
+      update();
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSlider);
+    } else {
+      initSlider();
+    }
+
+  })(); /* end IIFE */
+  </script>
+
+  <!-- ══════════════════════════════════════════════════════════
+       DEMO: Uncomment the block below to test vessel markers
+       before live AIS data is connected.
+       ══════════════════════════════════════════════════════════
+  <script>
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      var demo = [
+        { mmsi:'123456001', name:'INS Vikrant',    lat:15.5, lon:73.8, heading:45,  speed:12, flag:'India', type:'other'  },
+        { mmsi:'123456002', name:'MV Chola Star',  lat:10.2, lon:78.3, heading:270, speed:9,  flag:'India', type:'cargo'  },
+        { mmsi:'123456003', name:'MT Sagar Deep',  lat:19.1, lon:71.5, heading:180, speed:6,  flag:'India', type:'tanker' },
+        { mmsi:'123456004', name:'FV Matsyagandha',lat:8.4,  lon:77.0, heading:90,  speed:4,  flag:'India', type:'fishing'},
+        { mmsi:'123456005', name:'SUSPECT-X77',    lat:22.3, lon:68.9, heading:315, speed:18, flag:'Unknown',type:'suspect'}
+      ];
+      demo.forEach(function (v) { window.maritime.addVessel(v); });
+    }, 2000);
+  });
+  </script>
+  -->
+
+  <!-- Google Translate -->
+  <script type="text/javascript">
+    function googleTranslateElementInit () {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,hi',
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
+
+</body>
+</html>

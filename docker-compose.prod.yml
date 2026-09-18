@@ -1,0 +1,136 @@
+version: "3.8"
+
+networks:
+  gateway_net:
+    driver: bridge
+  internal_data_mesh:
+    driver: bridge
+    internal: true # ZERO-TRUST: Prohibits external ingress/egress for the database and cache tier
+
+volumes:
+  pg_data_prod:
+  redis_data_prod:
+
+services:
+  # =======================================================
+  # 1. INGRESS GATEWAY (ONLY COMPONENT EXPOSED TO INTERNET)
+  # =======================================================
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: samundra_nginx_gateway
+    restart: always
+    ports:
+      - "80:80"   # HTTP Gateway with automatic security header injection
+      - "443:443" # HTTPS Gateway
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - gateway_net
+
+  # =======================================================
+  # 2. FRONTEND TIER (NEXT.JS 15 - UNPRIVILEGED USER 1001)
+  # =======================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: samundra_frontend_prod
+    restart: always
+    expose:
+      - "3000" # Internal container port only (NOT exposed on host)
+    environment:
+      - NODE_ENV=production
+    networks:
+      - gateway_net
+
+  # =======================================================
+  # 3. BACKEND TIER (FASTAPI ASYNCPG - UNPRIVILEGED USER 10001)
+  # =======================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: samundra_backend_prod
+    restart: always
+    expose:
+      - "8000" # Internal container port only (NOT exposed on host)
+    env_file:
+      - ./backend/.env
+    environment:
+      - POSTGRES_SERVER=pgbouncer
+      - POSTGRES_PORT=6432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - pgbouncer
+      - redis
+    networks:
+      - gateway_net
+      - internal_data_mesh
+
+  # =======================================================
+  # 4. CONNECTION POOLER (PGBOUNCER TRANSACTION MODE)
+  # =======================================================
+  pgbouncer:
+    image: edoburu/pgbouncer:v1.22.1
+    container_name: samundra_pgbouncer_prod
+    restart: always
+    expose:
+      - "6432" # NO HOST PORT EXPOSURE
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: samundra_drishti
+      POOL_MODE: transaction
+      MAX_CLIENT_CONN: 2000
+      DEFAULT_POOL_SIZE: 25
+      SERVER_RESET_QUERY: "DISCARD ALL"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - internal_data_mesh
+
+  # =======================================================
+  # 5. DATABASE TIER (POSTGRESQL 16)
+  # =======================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: samundra_postgres_prod
+    restart: always
+    expose:
+      - "5432" # STRICTLY INTERNAL: NO HOST PORT BINDING TO THE INTERNET
+    environment:
+      POSTGRES_DB: samundra_drishti
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pg_data_prod:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d samundra_drishti"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - internal_data_mesh
+
+  # =======================================================
+  # 6. CACHE & THROTTLE TIER (REDIS LRU)
+  # =======================================================
+  redis:
+    image: redis:7.2-alpine
+    container_name: samundra_redis_prod
+    restart: always
+    expose:
+      - "6379" # STRICTLY INTERNAL: NO HOST PORT BINDING TO THE INTERNET
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - redis_data_prod:/data
+    networks:
+      - internal_data_mesh

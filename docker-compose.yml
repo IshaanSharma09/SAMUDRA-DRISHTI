@@ -1,0 +1,58 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: samundra_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: samundra_drishti
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432" # Exposed for direct admin/migration tasks
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d samundra_drishti"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pgbouncer:
+    image: edoburu/pgbouncer:v1.22.1
+    container_name: samundra_pgbouncer
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: samundra_drishti
+      POOL_MODE: transaction               # TRANSACTION POOLING MODE FOR MASSIVE SCALE
+      MAX_CLIENT_CONN: 2000                # High-concurrency client connections
+      DEFAULT_POOL_SIZE: 25                # Backend pool limit to protect Postgres CPU/RAM
+      SERVER_IDLE_TIMEOUT: 60
+      SERVER_RESET_QUERY: "DISCARD ALL"
+      IGNORE_STARTUP_PARAMETERS: "extra_float_digits"
+    ports:
+      - "6432:6432" # FastAPI asyncpg connects here
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: samundra_redis
+    restart: unless-stopped
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
+    ports:
+      - "6379:6379" # Fast memory caching and distributed rate limiting
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  postgres_data:

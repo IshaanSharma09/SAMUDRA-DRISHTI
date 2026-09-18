@@ -1,0 +1,484 @@
+/* ==========================================================================
+   SAMUDRA DRISHTI — STYLES.CSS
+   Page-specific component overrides, dark theme, map, print.
+   All colors reference shared.css tokens via var(--...).
+   No hardcoded hex in component rules.
+   ========================================================================== */
+
+/* ==========================================================================
+   1.  GOOGLE TRANSLATE — TOTAL SUPPRESSION
+   ========================================================================== */
+.skiptranslate > iframe,
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+iframe.goog-te-banner-frame,
+iframe[class*="goog-te-banner-frame"],
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.goog-tooltip,
+.goog-tooltip:hover,
+.VIpgJd-ZVi9od-ORHb-OEVmcd {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  pointer-events: none !important;
+}
+body, body.goog-te-banner-frame {
+  top: 0 !important;
+  position: static !important;
+  margin-top: 0 !important;
+}
+.goog-text-highlight { background: none !important; box-shadow: none !important; }
+.goog-logo-link, .goog-te-gadget span, .goog-te-gadget img { display: none !important; }
+
+/* Translate dropdown styled for header */
+.goog-te-gadget { color: transparent !important; font-size: 0 !important; }
+.goog-te-gadget .goog-te-combo {
+  background: rgba(255,255,255,0.09) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  border-radius: 3px !important;           /* var(--r-sm) — no pill shape */
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  outline: none !important;
+  cursor: pointer !important;
+  transition: background 150ms ease, border-color 150ms ease !important;
+}
+.goog-te-gadget .goog-te-combo:hover {
+  background: rgba(255,255,255,0.16) !important;
+  border-color: rgba(255,255,255,0.30) !important;
+}
+.goog-te-gadget .goog-te-combo option {
+  color: #0C1B2E !important;
+  background: #FFFFFF !important;
+}
+[data-theme="dark"] .goog-te-gadget .goog-te-combo {
+  background: rgba(255,255,255,0.07) !important;
+  border-color: rgba(255,255,255,0.13) !important;
+}
+[data-theme="dark"] .goog-te-gadget .goog-te-combo option {
+  color: #E4EDF5 !important;
+  background: #0D1929 !important;
+}
+#google_translate_element { display: flex; align-items: center; min-height: 28px; }
+
+/* ==========================================================================
+   2.  REVEAL ANIMATIONS (scroll-triggered, purposeful)
+       Translate only 12 px — not a dramatic stage entrance
+   ========================================================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity   0.5s cubic-bezier(0.0, 0, 0.2, 1),
+    transform 0.5s cubic-bezier(0.0, 0, 0.2, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Stagger timing driven by shared.css .stagger-N classes */
+
+/* ==========================================================================
+   3.  MAP — FLOATING OVERLAY CHIP
+   ========================================================================== */
+.map-floating-overlay {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255,255,255,0.94);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--border, #C4D3E0);
+  border-radius: 3px;                     /* var(--r-sm) */
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-3, #486480);
+  z-index: 800;
+  pointer-events: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+[data-theme="dark"] .map-floating-overlay {
+  background: rgba(13,25,41,0.92);
+  border-color: var(--border, #1C3050);
+  color: #A6C0D4;
+}
+
+/* ==========================================================================
+   4.  TACTICAL DARK MAP FILTER (CSS only — does not touch Leaflet JS)
+       Inverts CartoDB Voyager tiles to a dark, legible tactical display.
+   ========================================================================== */
+[data-theme="dark"] .leaflet-tile-pane,
+[data-theme="dark"] .leaflet-layer {
+  filter: invert(100%) hue-rotate(180deg) brightness(86%) contrast(94%) saturate(80%);
+}
+/* Re-invert UI controls so they stay readable on dark surfaces */
+[data-theme="dark"] .leaflet-control-zoom-in,
+[data-theme="dark"] .leaflet-control-zoom-out,
+[data-theme="dark"] .leaflet-control-attribution {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%);
+}
+[data-theme="dark"] .leaflet-control-zoom {
+  border-color: #1C3050 !important;
+  background: #0D1929 !important;
+}
+[data-theme="dark"] .leaflet-control-zoom a {
+  background: #0D1929 !important;
+  color: #E4EDF5 !important;
+  border-bottom-color: #1C3050 !important;
+}
+
+/* ==========================================================================
+   5.  STATUS BADGE PILLS
+       Max border-radius: var(--r-sm) = 3px. No rounded pills.
+   ========================================================================== */
+.pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 3px 8px;
+  border-radius: 3px;                     /* var(--r-sm) — strict */
+  border: 1px solid var(--border, #C4D3E0);
+  background: var(--surface, #FFFFFF);
+  color: var(--text-2, #1C3246);
+  white-space: nowrap;
+}
+
+.pill-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Operational */
+.pill-operational {
+  background: var(--c-ok-bg);
+  border-color: var(--c-ok-border);
+  color: var(--c-ok);
+}
+.pill-operational .pill-dot {
+  background: var(--c-ok);
+  animation: dotPulse 2.8s cubic-bezier(0.4,0,0.2,1) infinite;
+}
+
+/* Header operational pill — white-tinted on dark header */
+.site-header .pill-operational {
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,255,255,0.18);
+  color: #FFFFFF;
+}
+.site-header .pill-operational .pill-dot { background: #4ADE80; }
+
+/* Standby */
+.pill-standby {
+  background: var(--c-warn-bg);
+  border-color: var(--c-warn-border);
+  color: var(--c-warn);
+}
+.pill-standby .pill-dot { background: var(--c-warn); }
+
+/* Normal / neutral */
+.pill-normal {
+  background: var(--surface-alt, #EBF0F7);
+  border-color: var(--border, #C4D3E0);
+  color: var(--text-2, #1C3246);
+}
+.pill-normal .pill-dot { background: var(--text-3, #486480); }
+
+/* Scheduled / info */
+.pill-scheduled {
+  background: var(--c-info-bg);
+  border-color: var(--c-info-border);
+  color: var(--c-info);
+}
+.pill-scheduled .pill-dot { background: var(--c-info); }
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.45; transform: scale(1.25); }
+}
+
+/* ==========================================================================
+   6.  SATELLITE PASSES GRID
+   ========================================================================== */
+.sat-section { /* no extra margin — handled by page-main gap */ }
+
+.sat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.sat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;                     /* var(--r-md) */
+  box-shadow: var(--shadow-1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition:
+    transform      250ms cubic-bezier(0.4,0,0.2,1),
+    box-shadow     250ms cubic-bezier(0.4,0,0.2,1),
+    border-color   250ms cubic-bezier(0.4,0,0.2,1);
+}
+.sat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+  border-color: var(--border-strong);
+}
+
+.sat-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sat-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-1);
+  line-height: 1.25;
+}
+.sat-sensor {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-3);
+  margin-top: 3px;
+}
+
+.sat-meta { display: flex; flex-direction: column; gap: 8px; margin: 0; }
+.sat-meta div { display: flex; flex-direction: column; gap: 2px; }
+
+.sat-meta dt {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-4);
+}
+.sat-meta dd {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+.sat-eta { color: var(--text-1); }
+
+.sat-note-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--india-green);
+  background: var(--india-green-tint);
+  border: 1px solid var(--india-green-border);
+  padding: 3px 8px;
+  border-radius: 3px;                     /* var(--r-sm) */
+  margin-top: auto;
+}
+.sat-note-badge svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+/* ==========================================================================
+   7.  SYSTEM TELEMETRY CONSOLE
+   ========================================================================== */
+.telemetry-section { /* gap handled by page-main */ }
+
+.telemetry-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.telemetry-live-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.telemetry-live-tag .pill-dot { background: var(--c-ok); }
+
+/* Console box — always dark regardless of theme */
+.telemetry-log {
+  background: var(--term-bg);
+  border: 1px solid var(--term-border);
+  border-radius: 6px;                     /* var(--r-md) */
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+}
+
+.telemetry-window-bar {
+  background: var(--term-bar);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--term-border);
+}
+.telemetry-dots { display: flex; align-items: center; gap: 5px; }
+.telemetry-dots .dot { width: 10px; height: 10px; border-radius: 50%; }
+.telemetry-dots .dot-red    { background: #EF4444; }
+.telemetry-dots .dot-yellow { background: #F59E0B; }
+.telemetry-dots .dot-green  { background: #22C55E; }
+.telemetry-console-title {
+  font-size: 11px;
+  color: #4A6880;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.telemetry-body {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-x: auto;
+}
+.telemetry-line {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+.telemetry-ts {
+  flex-shrink: 0;
+  color: var(--term-ts);
+  font-weight: 600;
+  min-width: 7em;
+  font-variant-numeric: tabular-nums;
+}
+.telemetry-msg       { color: var(--term-text); }
+.telemetry-ok        { color: var(--term-ok);  font-weight: 600; }
+.telemetry-highlight { color: var(--term-hi);  font-weight: 600; }
+
+/* ==========================================================================
+   8.  EXPORT PDF BUTTON
+   ========================================================================== */
+.btn-export-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--header-bg);
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 6px;                     /* var(--r-md) */
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: var(--shadow-1);
+  cursor: pointer;
+  margin-left: auto;
+  white-space: nowrap;
+  transition:
+    background  250ms cubic-bezier(0.4,0,0.2,1),
+    box-shadow  250ms cubic-bezier(0.4,0,0.2,1),
+    transform   250ms cubic-bezier(0.4,0,0.2,1);
+}
+.btn-export-pdf:hover {
+  background: #162E52;
+  box-shadow: var(--shadow-2);
+  transform: translateY(-1px);
+}
+[data-theme="dark"] .btn-export-pdf {
+  background: #182844;
+  border-color: #1C3050;
+}
+[data-theme="dark"] .btn-export-pdf:hover {
+  background: #213460;
+  border-color: #284260;
+}
+.btn-export-pdf svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* ==========================================================================
+   9.  RESPONSIVE
+   ========================================================================== */
+@media (max-width: 900px) {
+  .sat-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .sat-grid { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   10. REDUCED MOTION
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .sat-card,
+  .btn-export-pdf { transition: none; }
+  .pill-operational .pill-dot { animation: none; }
+  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
+/* ==========================================================================
+   11. PRINT / PDF EXPORT
+   ========================================================================== */
+@media print {
+  .site-header,
+  .site-footer,
+  .header-actions,
+  #google_translate_element,
+  .filter-row,
+  .btn-export-pdf,
+  .data-source-badge,
+  .timelag-bar,
+  .info-block,
+  .theme-toggle-btn,
+  .tricolor-strip { display: none !important; }
+
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    font-size: 12pt !important;
+    top: 0 !important;
+  }
+
+  .page-main { padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
+
+  .page-top {
+    border-bottom: 2px solid #0B1E3D;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+  }
+  .page-top::before {
+    content: "GOVERNMENT OF INDIA \2022 SAMUDRA DRISHTI \2022 NATIONAL MARITIME SURVEILLANCE \2022 RESTRICTED";
+    display: block;
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #0B1E3D;
+    margin-bottom: 6px;
+  }
+  .page-title { font-size: 20pt !important; color: #0B1E3D !important; }
+  .page-sub   { font-size: 10pt !important; }
+
+  .table-wrap { border: 1px solid #000 !important; box-shadow: none !important; }
+  .reports-table { width: 100% !important; }
+  .reports-table th {
+    background: #0B1E3D !important;
+    color: #FFFFFF !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .reveal { opacity: 1 !important; transform: none !important; }
+}

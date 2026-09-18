@@ -1,0 +1,28 @@
+# Python
+backend/venv/
+backend/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Node
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+node_modules/
+npm-debug.log*
+
+# Environment & Secrets
+backend/.env
+frontend/.env.local
+.env
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Docker volumes
+postgres_data/
+redis_data/
