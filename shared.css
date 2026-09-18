@@ -58,10 +58,10 @@
   --shadow-2: 0 2px 8px rgba(10,28,58,0.08), 0 4px 16px rgba(10,28,58,0.05);
   --shadow-3: 0 6px 20px rgba(10,28,58,0.12), 0 2px 6px rgba(10,28,58,0.06);
 
-  /* ── Layout ── */
-  --header-h:    64px;
+  /* ── Layout (strictly unified with landing.css Swiss grid) ── */
+  --header-h:    76px;
   --tricolor-h:  3px;
-  --max-w:       1280px;
+  --max-w:       1360px;
 
   /* ── LIGHT MODE: Surfaces ── */
   --bg:             #F1F5F9;
@@ -384,15 +384,13 @@ button { font-family: var(--font-sans); cursor: pointer; border: none; backgroun
   transition:
     background   var(--dur-fast) var(--ease-std),
     border-color var(--dur-fast) var(--ease-std),
-    color        var(--dur-fast) var(--ease-std),
-    transform    var(--dur-fast) var(--ease-std);
+    color        var(--dur-fast) var(--ease-std);
 }
 
 .theme-toggle-btn:hover {
   background: rgba(255,255,255,0.15);
   border-color: rgba(255,255,255,0.28);
   color: #FFFFFF;
-  transform: translateY(-1px);
 }
 
 .theme-toggle-btn svg { width: 16px; height: 16px; }
@@ -488,14 +486,12 @@ button { font-family: var(--font-sans); cursor: pointer; border: none; backgroun
   text-decoration: none;
   color: inherit;
   transition:
-    transform      var(--dur-base) var(--ease-out),
     box-shadow     var(--dur-base) var(--ease-std),
     border-color   var(--dur-base) var(--ease-std),
     background     var(--dur-base) var(--ease-std);
 }
 
 .metric-card:hover {
-  transform: translateY(-2px);
   box-shadow: var(--shadow-2);
   border-color: var(--border-strong);
   text-decoration: none;

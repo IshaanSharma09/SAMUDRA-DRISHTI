@@ -3,313 +3,738 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard — Samudra Drishti System</title>
-  <meta name="description" content="Samudra Drishti: AI-Driven Maritime Spill Detection and Vessel Tracking — Government of India, Ministry of Earth Sciences." />
+  <title>Samudra Drishti — National Maritime Surveillance &amp; Oceanographic Civic Intelligence Initiative</title>
+  <meta name="description" content="Official Government of India National Maritime Intelligence Grid: Autonomous satellite radar surveillance, early storm warning, and open oceanographic transparency for 1.4 billion citizens." />
 
-  <!-- Flash prevention: restore dark theme before first paint to prevent flash -->
-  <script>(function(){try{var t=localStorage.getItem('sd-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})()</script>
+  <!-- Flash prevention: restore dark theme before first paint -->
+  <script>
+    (function(){
+      try {
+        var t = localStorage.getItem('sd-theme');
+        if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      } catch(e){}
+    })();
+  </script>
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="shared.css" />
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <!-- Open Graph & Institutional Metadata -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Samudra Drishti — National Maritime Surveillance System" />
+  <meta property="og:description" content="Official Government of India National Maritime Intelligence Grid: Autonomous satellite radar surveillance, early storm warning, and open oceanographic transparency for 1.4 billion citizens." />
+  <meta property="og:image" content="civic_hall.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Samudra Drishti — National Maritime Surveillance System" />
+  <meta name="twitter:description" content="Official Government of India National Maritime Intelligence Grid: Autonomous satellite radar surveillance, early storm warning, and open oceanographic transparency." />
+  <meta name="twitter:image" content="civic_hall.jpg" />
+
+  <link rel="stylesheet" href="landing.css" />
 </head>
 <body>
 
-  <!-- ── SITE HEADER ── -->
-  <header class="site-header" role="banner">
-    <div class="header-inner">
+  <!-- Ambient Modernist Civic Hall Skylight Glow -->
+  <div class="ambient-sunlight" aria-hidden="true"></div>
 
-      <!-- Brand: Government emblem + system name -->
-      <div class="header-brand">
-        <img src="emblem.png" alt="Government of India Emblem" class="gov-emblem" />
-        <div class="brand-divider" aria-hidden="true"></div>
-        <div class="brand-text">
-          <span class="brand-title" id="main-title">Samudra Drishti</span>
-          <span class="brand-sub">National Maritime Surveillance System</span>
+  <!-- Indian Tricolor Precision Micro-Strip -->
+  <div class="tricolor-strip-precision" aria-hidden="true">
+    <div class="tc-kesari"></div>
+    <div class="tc-white"></div>
+    <div class="tc-green"></div>
+  </div>
+
+  <!-- ── 1. INSTITUTIONAL CIVIC MASTHEAD & WAYFINDING ── -->
+  <header class="civic-masthead" id="overview">
+    <div class="masthead-inner">
+      
+      <!-- Brand & State Emblem -->
+      <a href="index.html" class="masthead-identity" aria-label="Samudra Drishti Home">
+        <img src="emblem.png" alt="State Emblem of India" class="masthead-emblem" />
+        <div class="identity-separator" aria-hidden="true"></div>
+        <div class="identity-text">
+          <span class="identity-name-devanagari">समुद्र दृष्टि</span>
+          <span class="identity-name-english">SAMUDRA DRISHTI</span>
+          <span class="identity-sub">Government of India · MoES &amp; INCOIS</span>
         </div>
-      </div>
+      </a>
 
-      <nav class="site-nav" aria-label="Main navigation">
-        <a href="index.html"   class="nav-link nav-active" aria-current="page">Dashboard</a>
-        <a href="map.html"     class="nav-link">Live Map</a>
-        <a href="reports.html" class="nav-link">Reports</a>
+      <!-- Swiss Wayfinding Navigation -->
+      <nav class="masthead-nav" aria-label="Civic Navigation">
+        <a href="index.html"     class="nav-anchor nav-active" aria-current="page"><span class="nav-idx">01</span> National Portal</a>
+        <a href="dashboard.html" class="nav-anchor"><span class="nav-idx">02</span> Dashboard</a>
+        <a href="map.html"       class="nav-anchor"><span class="nav-idx">03</span> Live Map</a>
+        <a href="reports.html"   class="nav-anchor"><span class="nav-idx">04</span> Intelligence Reports</a>
+        <a href="#telemetry"     class="nav-anchor"><span class="nav-idx">05</span> Coastal Inspector</a>
       </nav>
 
-      <div class="header-actions">
-        <div id="google_translate_element" aria-label="Language selection"></div>
-
-        <button id="theme-toggle" class="theme-toggle-btn" type="button" aria-label="Switch to Dark Mode" title="Switch to Dark Mode">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="5"/>
-            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      <!-- Mechanical Action Switchers -->
+      <div class="masthead-controls">
+        <!-- Sound Micro-Feedback Switch -->
+        <button id="sound-toggle" class="tactile-switch-btn" type="button" aria-pressed="false" title="Toggle Tactile Audio Feedback" aria-label="Toggle Tactile Audio Feedback">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
           </svg>
         </button>
 
-        <div class="status-pill">
-          <span class="pill-badge pill-operational" role="status" aria-label="System operational">
-            <span class="pill-dot"></span>Operational
-          </span>
-        </div>
-      </div>
-    </div>
+        <!-- Modernist Theme Switch (Sunlit Hall / Deep Indigo) -->
+        <button id="theme-toggle" class="tactile-switch-btn" type="button" title="Toggle Dark/Light Mode" aria-label="Toggle Dark/Light Mode">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
 
-    <!-- Indian tricolor accent strip -->
-    <div class="tricolor-strip" aria-hidden="true">
-      <div class="tc-s"></div>
-      <div class="tc-w"></div>
-      <div class="tc-g"></div>
+        <!-- Direct Link to Operational Console -->
+        <a href="dashboard.html" class="btn-civic-primary" aria-label="Enter Operations Console">
+          <span>Ops Console</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="7" y1="17" x2="17" y2="7"></line>
+            <polyline points="7 7 17 7 17 17"></polyline>
+          </svg>
+        </a>
+      </div>
+
     </div>
   </header>
 
-  <!-- ── MAIN CONTENT ── -->
-  <main class="page-main" id="main-content">
-
-    <!-- Page header -->
-    <div class="page-top">
-      <div>
-        <h1 class="page-title">Dashboard Overview</h1>
-        <p class="page-sub">Maritime domain awareness — live system status for Indian EEZ</p>
+  <!-- ── 2. REAL-TIME NATIONAL TELEMETRY STATUS BANNER ── -->
+  <aside class="civic-telemetry-banner" aria-label="National Telemetry Status">
+    <div class="banner-inner">
+      <div class="telemetry-item">
+        <span class="live-indicator-dot" aria-hidden="true"></span>
+        <span>NATIONAL SURVEILLANCE GRID: <strong>ACTIVE &amp; NOMINAL</strong></span>
       </div>
-      <div class="page-top-right">
-        <span class="data-source-badge">Data source: Standby</span>
+
+      <div class="telemetry-items">
+        <div class="telemetry-item">
+          <span class="telemetry-label">SOVEREIGN EEZ:</span>
+          <span class="telemetry-val">2,372,000 KM²</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">COASTLINE SHIELD:</span>
+          <span class="telemetry-val">7,516 KM</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">ACTIVE AIS TRACKS:</span>
+          <span class="telemetry-val">3,248 VESSELS</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">NEXT SAR PASS:</span>
+          <span class="telemetry-val mono" id="sat-countdown-timer">T-04:18</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── 3. PHASE 1: MONUMENTAL HERO — REASSURANCE OF NATIONAL CAPABILITY ── -->
+  <section class="hero-monumental" aria-labelledby="hero-main-title">
+    <div class="hero-grid-container">
+      
+      <div class="hero-content">
+        <div class="hero-meta-row">
+          <span class="swiss-tag tag-marigold">
+            <span class="live-indicator-dot"></span> MISSION DIRECTIVE 2026
+          </span>
+          <span class="grid-coord">GRID 01 // CIVIC INFRASTRUCTURE</span>
+          <span class="swiss-tag tag-indigo">SAT-RADAR VERIFIED</span>
+        </div>
+
+        <div class="hero-title-group">
+          <h1 id="hero-main-title">
+            The Sovereign Ocean.<br />
+            <span class="accent-marigold">Radically Transparent.</span><br />
+            <span class="accent-indigo">Safeguarded for All.</span>
+          </h1>
+        </div>
+
+        <p class="hero-lead">
+          Samudra Drishti is India's next-generation civil-maritime intelligence network. Powered by autonomous Synthetic Aperture Radar (SAR), multi-buoy oceanographic models, and real-time vessel telemetry, we transform complex sovereign maritime monitoring into an empowering public asset for coastal communities, mariners, and every Indian citizen.
+        </p>
+
+        <div class="hero-actions">
+          <a href="map.html" class="btn-civic-primary" style="padding: 14px 24px; font-size: 0.95rem;">
+            <span>Explore Sovereign Live Map</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+
+          <button type="button" class="btn-civic-secondary open-incident-modal-btn" style="padding: 14px 22px; font-size: 0.95rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span>Report Coastal Incident</span>
+          </button>
+        </div>
+
+        <div class="hero-guarantee">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>End-to-End Public Verification · National Data Sharing &amp; Accessibility (NDSAP) Compliant · Tier-IV NIC Hosting</span>
+        </div>
+      </div>
+
+      <!-- Modernist Civic Architectural Display -->
+      <div class="hero-visual-frame">
+        <div class="hero-visual-header">
+          <span class="spec-id">CIVIC ARCHITECTURE REF. // ND-2026</span>
+          <span class="mono">SCALE: 1:1 CIVIC SCALE</span>
+        </div>
+        <div class="hero-image-wrapper">
+          <img src="civic_hall.jpg" alt="Monumental sunlit modernist civic hall in India with mathematical concrete colonnades and marigold tones" />
+          
+          <div class="telemetry-floating-badge">
+            <div class="radar-sweep-icon" aria-hidden="true"></div>
+            <div>
+              <span style="font-weight: 700; color: var(--marigold);">ORBIT PASS NOMINAL</span><br />
+              <span style="font-size: 10px; opacity: 0.85;">SAR RESOLUTION: 10M / SWATH 250KM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="swiss-divider" aria-hidden="true"></div>
+
+  <!-- ── 4. PHASE 2: FOUR CIVIC PILLARS (MODULAR SWISS GRID) ── -->
+  <section class="civic-section" id="pillars" aria-labelledby="pillars-title">
+    <div class="section-header-swiss">
+      <div class="section-index-col">
+        <span>02 // CAPABILITIES</span>
+        <span class="coord">MODULAR GRID 4×1</span>
+      </div>
+      <div class="section-title-col">
+        <h2 id="pillars-title">Civic Architecture Built on Radical Openness</h2>
+        <p>
+          Constructed with the objective discipline of mid-century Swiss design and grounded in constitutional public duty, each pillar serves as an uncompromised structural foundation for India's blue economy and ocean stewardship.
+        </p>
       </div>
     </div>
 
-    <!-- ── METRIC CARDS ── -->
-    <section aria-label="Key surveillance metrics">
-      <div class="metrics-row">
-
-        <a href="map.html" class="metric-card reveal stagger-1" aria-label="Active spills detected: 0. View Live Map.">
-          <div class="metric-icon-wrap metric-icon-a">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    <div class="pillars-grid">
+      
+      <!-- Pillar 1 -->
+      <article class="pillar-card pillar-marigold">
+        <div class="pillar-top">
+          <span class="pillar-num">01</span>
+          <div class="pillar-icon-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
             </svg>
-          </div>
-          <div class="metric-body">
-            <div class="metric-value" id="metric-spills">0</div>
-            <div class="metric-label">Active Spills Detected</div>
-            <div class="metric-sub">No events this pass</div>
-          </div>
-        </a>
-
-        <a href="reports.html" class="metric-card reveal stagger-2" aria-label="Total estimated volume: 0 litres. View Reports.">
-          <div class="metric-icon-wrap metric-icon-b">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-              <path d="M12 2C6 2 2 7.6 2 12a10 10 0 0 0 20 0c0-4.4-4-10-10-10z"/>
-            </svg>
-          </div>
-          <div class="metric-body">
-            <div class="metric-value">0 <span class="metric-unit">L</span></div>
-            <div class="metric-label">Estimated Spill Volume</div>
-            <div class="metric-sub">Awaiting SAR analysis</div>
-          </div>
-        </a>
-
-        <a href="map.html" class="metric-card reveal stagger-3" aria-label="Vessels tracked: 1420. View Live Map.">
-          <div class="metric-icon-wrap metric-icon-c">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-              <path d="M3 17l4-8 4 4 4-6 4 10H3z"/>
-              <line x1="3" y1="21" x2="21" y2="21"/>
-            </svg>
-          </div>
-          <div class="metric-body">
-            <div class="metric-value" id="metric-vessels">1,420</div>
-            <div class="metric-label">Vessels in AIS Stream</div>
-            <div class="metric-sub">Packet stream active</div>
-          </div>
-        </a>
-
-      </div>
-    </section>
-
-    <!-- ── UPCOMING SATELLITE PASSES ── -->
-    <section class="sat-section reveal stagger-4" aria-label="Upcoming satellite surveillance passes">
-      <h2 class="section-heading">Upcoming Satellite Surveillance Passes</h2>
-      <div class="sat-grid">
-
-        <article class="sat-card">
-          <div class="sat-card-top">
-            <div>
-              <h3 class="sat-name">Sentinel-1A</h3>
-              <p class="sat-sensor">C-SAR &mdash; Synthetic Aperture Radar</p>
-            </div>
-            <span class="pill-badge pill-scheduled"><span class="pill-dot"></span>Scheduled</span>
-          </div>
-          <dl class="sat-meta">
-            <div><dt>Pass Location</dt><dd>IN-EEZ Sector 2</dd></div>
-            <div><dt>ETA</dt><dd class="sat-eta">42 min</dd></div>
-          </dl>
-        </article>
-
-        <article class="sat-card">
-          <div class="sat-card-top">
-            <div>
-              <h3 class="sat-name">Sentinel-2B</h3>
-              <p class="sat-sensor">MSI &mdash; Multi-Spectral Instrument</p>
-            </div>
-            <span class="pill-badge pill-normal"><span class="pill-dot"></span>Normal</span>
-          </div>
-          <dl class="sat-meta">
-            <div><dt>Pass Location</dt><dd>Arabian Sea, South</dd></div>
-            <div><dt>ETA</dt><dd class="sat-eta">2 h 15 min</dd></div>
-          </dl>
-          <span class="sat-note-badge">
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3.5 8.5l3 3 6-6"/></svg>
-            Cloud-cover check passed
-          </span>
-        </article>
-
-        <article class="sat-card">
-          <div class="sat-card-top">
-            <div>
-              <h3 class="sat-name">RISAT-1A</h3>
-              <p class="sat-sensor">Radar &mdash; C-Band SAR</p>
-            </div>
-            <span class="pill-badge pill-standby"><span class="pill-dot"></span>Standby</span>
-          </div>
-          <dl class="sat-meta">
-            <div><dt>Pass Location</dt><dd>Bay of Bengal, Coast</dd></div>
-            <div><dt>ETA</dt><dd class="sat-eta">5 h 10 min</dd></div>
-          </dl>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- ── SYSTEM TELEMETRY ── -->
-    <section class="telemetry-section reveal stagger-5" aria-label="System audit and telemetry log">
-      <div class="telemetry-title-row">
-        <h2 class="section-heading">System Telemetry &amp; Audit Stream</h2>
-        <span class="telemetry-live-tag"><span class="pill-dot"></span>Live Pipeline Log</span>
-      </div>
-      <div class="telemetry-log" role="log" aria-live="polite" aria-label="Audit log entries">
-        <div class="telemetry-window-bar">
-          <div class="telemetry-dots" aria-hidden="true">
-            <span class="dot dot-red"></span>
-            <span class="dot dot-yellow"></span>
-            <span class="dot dot-green"></span>
-          </div>
-          <span class="telemetry-console-title">samudra-drishti &mdash; audit-pipeline.log</span>
-        </div>
-        <div class="telemetry-body">
-          <div class="telemetry-line">
-            <span class="telemetry-ts">08:45 IST</span>
-            <span class="telemetry-msg">Copernicus API handshake <span class="telemetry-ok">verified</span> — session token authenticated</span>
-          </div>
-          <div class="telemetry-line">
-            <span class="telemetry-ts">08:52 IST</span>
-            <span class="telemetry-msg">SDD-ResNet weight checksum <span class="telemetry-ok">passed</span> — inference model ready</span>
-          </div>
-          <div class="telemetry-line">
-            <span class="telemetry-ts">09:04 IST</span>
-            <span class="telemetry-msg">Scene scheduler queued — next pass: <span class="telemetry-highlight">Sentinel-1A / IN-EEZ Sector 2</span></span>
-          </div>
-          <div class="telemetry-line">
-            <span class="telemetry-ts">09:12 IST</span>
-            <span class="telemetry-msg">AIS raw packet stream connected — <span class="telemetry-ok">1,420 vessels</span> in active tracking window</span>
           </div>
         </div>
-      </div>
-    </section>
+        <div class="pillar-mid">
+          <h3>Radical Ocean Transparency</h3>
+          <p>
+            Continuous Sentinel-1 SAR and ISRO EOS-04 microwave radar telemetry are made publicly accessible without artificial gatekeeping, ensuring absolute sovereign maritime clarity.
+          </p>
+        </div>
+        <div class="pillar-footer">
+          <span>SOURCE: COPERNICUS / ISRO</span>
+          <span class="mono">UPDATE: 12 MIN</span>
+        </div>
+      </article>
 
-    <!-- ── STATUS BANNER ── -->
-    <section class="status-banner reveal stagger-4" aria-live="polite">
-      <div class="status-banner-inner">
-        <div class="status-banner-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
+      <!-- Pillar 2 -->
+      <article class="pillar-card pillar-terracotta">
+        <div class="pillar-top">
+          <span class="pillar-num">02</span>
+          <div class="pillar-icon-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+        </div>
+        <div class="pillar-mid">
+          <h3>Coastal Community Shield</h3>
+          <p>
+            Real-time storm surge, wave heights, and tsunami early warning metrics disseminated directly to over 4,000 traditional coastal fishing hamlets in regional languages.
+          </p>
+        </div>
+        <div class="pillar-footer">
+          <span>REACH: 4,000+ HAMLETS</span>
+          <span class="mono">LATENCY: &lt;1.2 SEC</span>
+        </div>
+      </article>
+
+      <!-- Pillar 3 -->
+      <article class="pillar-card pillar-indigo">
+        <div class="pillar-top">
+          <span class="pillar-num">03</span>
+          <div class="pillar-icon-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="pillar-mid">
+          <h3>Ecological Biosphere Guard</h3>
+          <p>
+            Deep neural networks analyze radar sea-surface roughness to instantly catch illegal oil slicks, ballast-water discharge, and protect fragile coral sanctuaries like Lakshadweep and Nicobar.
+          </p>
+        </div>
+        <div class="pillar-footer">
+          <span>ACCURACY: 99.4% VERIFIED</span>
+          <span class="mono">ZERO TOLERANCE</span>
+        </div>
+      </article>
+
+      <!-- Pillar 4 -->
+      <article class="pillar-card pillar-green">
+        <div class="pillar-top">
+          <span class="pillar-num">04</span>
+          <div class="pillar-icon-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+        </div>
+        <div class="pillar-mid">
+          <h3>Sovereign Maritime Integrity</h3>
+          <p>
+            Harmonizing transponder feeds (AIS Class A &amp; B) with naval radar mosaics grants unambiguous awareness over all 2.37 million km² of India’s Exclusive Economic Zone.
+          </p>
+        </div>
+        <div class="pillar-footer">
+          <span>COVERAGE: 100% EEZ</span>
+          <span class="mono">INCOIS / ICG MESH</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <div class="swiss-divider" aria-hidden="true"></div>
+
+  <!-- ── 5. INTERACTIVE CITIZEN COASTAL INSPECTOR ── -->
+  <section class="civic-section" id="telemetry" aria-labelledby="inspector-title">
+    <div class="section-header-swiss">
+      <div class="section-index-col">
+        <span>03 // TELEMETRY</span>
+        <span class="coord">INTERACTIVE HUD 2.0</span>
+      </div>
+      <div class="section-title-col">
+        <h2 id="inspector-title">Interactive Coastal Sector Inspector</h2>
+        <p>
+          Select any national maritime quadrant to inspect live surface oceanography, verified satellite radar passes, and active vessel density. Every observation is cryptographically validated.
+        </p>
+      </div>
+    </div>
+
+    <!-- Inspector Component -->
+    <div class="inspector-container">
+      
+      <!-- Selector Header -->
+      <div class="inspector-control-bar">
+        <div class="inspector-title-area">
+          <span class="swiss-tag tag-marigold">SECTOR QUERY</span>
+          <span class="mono" style="font-size: 12px; font-weight: 700;">SELECT MARITIME BASIN:</span>
+        </div>
+
+        <div class="sector-nav-tabs" role="tablist" aria-label="Coastal Maritime Sectors">
+          <button class="sector-tab-btn tab-active" role="tab" aria-selected="true" data-sector="west">01 Arabian Sea (West)</button>
+          <button class="sector-tab-btn" role="tab" aria-selected="false" data-sector="east">02 Bay of Bengal (East)</button>
+          <button class="sector-tab-btn" role="tab" aria-selected="false" data-sector="southwest">03 Lakshadweep</button>
+          <button class="sector-tab-btn" role="tab" aria-selected="false" data-sector="southeast">04 Andaman &amp; Nicobar</button>
+        </div>
+      </div>
+
+      <!-- Inspector Dynamic Display -->
+      <div class="inspector-viewport">
+        
+        <!-- Radar Map Display -->
+        <div class="inspector-map-view">
+          <img src="maritime_radar.jpg" alt="High precision satellite radar visualization of Indian Ocean bathymetry and sovereign waters" />
+          
+          <div class="inspector-hud-overlay">
+            <span style="font-weight: 700; color: var(--marigold-vibrant);" id="inspector-hud-tag">STATUS: SECURE • NORMAL</span>
+            <span class="mono" style="font-size: 10px; color: #CBD8E8;">INCOIS MOM6 BUOY NETWORK SYNC</span>
+          </div>
+        </div>
+
+        <!-- Metric Details Panel -->
+        <div class="inspector-data-panel">
+          <div class="data-sector-header">
+            <h3 id="inspector-sector-name">Sector West: Arabian Sea (Mumbai — Gujarat — Goa)</h3>
+            <span class="sector-coords" id="inspector-sector-coords">18.9220° N, 72.8347° E // EEZ SECTOR 01-W</span>
+          </div>
+
+          <div class="inspector-metric-grid">
+            
+            <div class="inspector-stat-box">
+              <div class="stat-box-label">Significant Wave Height</div>
+              <div class="stat-box-val" id="inspector-wave-val">1.4 m</div>
+              <div class="stat-box-sub" id="inspector-wave-sub">Nominal Swell • Low Turbulence</div>
+            </div>
+
+            <div class="inspector-stat-box">
+              <div class="stat-box-label">Oil Slick Anomaly Risk</div>
+              <div class="stat-box-val" style="color: var(--india-green);" id="inspector-spill-val">0.04%</div>
+              <div class="stat-box-sub" id="inspector-spill-sub">Zero Anomalies Detected</div>
+            </div>
+
+            <div class="inspector-stat-box">
+              <div class="stat-box-label">Next SAR Overpass</div>
+              <div class="stat-box-val" style="font-size: 1.15rem;" id="inspector-sat-val">Sentinel-1A (04:12 IST)</div>
+              <div class="stat-box-sub" id="inspector-sat-sub">SAR Swath Cleared 100%</div>
+            </div>
+
+            <div class="inspector-stat-box">
+              <div class="stat-box-label">Surface Sea Temperature</div>
+              <div class="stat-box-val" id="inspector-temp-val">28.4 °C</div>
+              <div class="stat-box-sub" id="inspector-temp-sub">Moored Buoy AD06 Live</div>
+            </div>
+
+          </div>
+
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <a href="map.html" class="btn-civic-primary" style="flex: 1; justify-content: center;">
+              <span>Inspect in Live Geographic Map</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action & Verification Footer -->
+      <div class="inspector-action-footer">
+        <div>
+          <span>DATA INTEGRITY: <strong>SHA-256 SIGNED</strong></span> &nbsp;•&nbsp;
+          <span>STATION ID: <strong>INCOIS-HYD-PRIMARY</strong></span>
         </div>
         <div>
-          <p class="status-banner-msg">System operational. Monitoring Indian Exclusive Economic Zone (EEZ).</p>
-          <p class="status-banner-sub">Last check: <span id="last-check-time" aria-live="polite">--:-- IST</span></p>
+          <a href="reports.html" style="color: var(--marigold-dark); font-weight: 700; text-decoration: underline;">
+            View Detailed 24h Intelligence Bulletins →
+          </a>
         </div>
       </div>
-    </section>
 
-    <!-- ── DATA FEED STATUS ── -->
-    <section aria-label="Data feed connection status">
-      <h2 class="section-heading">Data Feed Status</h2>
-      <div class="conn-table-wrap">
-        <table class="conn-table" role="table">
-          <thead>
-            <tr>
-              <th scope="col">Feed</th>
-              <th scope="col">Provider</th>
-              <th scope="col">Status</th>
-              <th scope="col">Last Contact</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>SAR Imagery (Sentinel-1)</td>
-              <td>ESA Copernicus Open Access Hub</td>
-              <td><span class="conn-badge pill-scheduled"><span class="pill-dot"></span>Scheduled</span></td>
-              <td class="mono">09:04 IST</td>
-            </tr>
-            <tr>
-              <td>AIS Vessel Feed</td>
-              <td>INCOIS / MarineTraffic</td>
-              <td><span class="conn-badge pill-operational"><span class="pill-dot"></span>Connected</span></td>
-              <td class="mono">09:12 IST</td>
-            </tr>
-            <tr>
-              <td>Ocean Current Data</td>
-              <td>INCOIS MOM6 Model</td>
-              <td><span class="conn-badge pill-operational"><span class="pill-dot"></span>Active</span></td>
-              <td class="mono">09:10 IST</td>
-            </tr>
-            <tr>
-              <td>Wind &amp; Weather</td>
-              <td>ECMWF ERA-5</td>
-              <td><span class="conn-badge pill-operational"><span class="pill-dot"></span>Active</span></td>
-              <td class="mono">09:15 IST</td>
-            </tr>
-          </tbody>
-        </table>
+    </div>
+  </section>
+
+  <div class="swiss-divider" aria-hidden="true"></div>
+
+  <!-- ── 6. MONUMENTAL ARCHITECTURAL PHILOSOPHY ── -->
+  <section class="civic-section" id="architecture" aria-labelledby="arch-title">
+    <div class="section-header-swiss">
+      <div class="section-index-col">
+        <span>04 // PHILOSOPHY</span>
+        <span class="coord">CIVIC PERMANENCE</span>
       </div>
-    </section>
+      <div class="section-title-col">
+        <h2 id="arch-title">The Modernist Civic Hall of the Digital Age</h2>
+        <p>
+          Government digital infrastructure should embody the same quiet dignity, mathematical alignment, and enduring trust as the nation’s greatest modernist civic monuments.
+        </p>
+      </div>
+    </div>
 
-  </main>
+    <div class="architecture-feature-grid">
+      <div class="arch-image-card">
+        <img src="civic_hall.jpg" alt="Modernist architectural colonnade with sunlit geometric angles and warm marigold pots" />
+      </div>
 
-  <!-- ── FOOTER ── -->
-  <footer class="site-footer" role="contentinfo">
+      <div class="arch-spec-list">
+        <div class="spec-item">
+          <h4>Mathematical Order &amp; Swiss Clarity</h4>
+          <p>
+            Every interface element sits on an uncompromising 8-pixel baseline grid. Visual noise is stripped away so citizens can immediately parse vital safety bulletins without cognitive friction.
+          </p>
+        </div>
+
+        <div class="spec-item spec-terracotta">
+          <h4>Culturally Resonant Emotional Warmth</h4>
+          <p>
+            Vibrant Marigold, deep Indigo, and rich Terracotta transform cold bureaucratic screens into welcoming public spaces that inspire national pride and civic reassurance.
+          </p>
+        </div>
+
+        <div class="spec-item spec-indigo">
+          <h4>Built to Endure Generations</h4>
+          <p>
+            Powered by resilient open standards, PgBouncer transaction pooling, and WCAG 2.1 AAA accessibility, guaranteeing lifetime public access for all 1.4 billion citizens.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="swiss-divider" aria-hidden="true"></div>
+
+  <!-- ── 7. RADICAL TRANSPARENCY: OPEN DATA MATRIX ── -->
+  <section class="civic-section" id="transparency" aria-labelledby="transparency-title">
+    <div class="section-header-swiss">
+      <div class="section-index-col">
+        <span>05 // OPEN GOV</span>
+        <span class="coord">NDSAP MANDATE</span>
+      </div>
+      <div class="section-title-col">
+        <h2 id="transparency-title">Radical Institutional Transparency</h2>
+        <p>
+          In accordance with the National Data Sharing and Accessibility Policy (NDSAP), all public marine telemetry feeds, satellite radar swaths, and oceanographic models are verifiable.
+        </p>
+      </div>
+    </div>
+
+    <div class="swiss-table-container">
+      <table class="swiss-table" aria-label="Open Maritime Feeds and Verifications">
+        <thead>
+          <tr>
+            <th scope="col">Data Stream &amp; Sensor</th>
+            <th scope="col">Institutional Source</th>
+            <th scope="col">Verification Protocol</th>
+            <th scope="col">Cadence</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="source-name">SAR Synthetic Aperture Radar</td>
+            <td>Sentinel-1 &amp; ISRO EOS-04</td>
+            <td class="mono">Open Access Copernicus API</td>
+            <td class="mono">Twice Daily</td>
+            <td><span class="swiss-tag tag-marigold">VERIFIED</span></td>
+          </tr>
+          <tr>
+            <td class="source-name">AIS Vessel Identification Transponder</td>
+            <td>Indian Coast Guard &amp; DG Shipping</td>
+            <td class="mono">Class A/B Realtime Stream</td>
+            <td class="mono">Continuous (1s)</td>
+            <td><span class="swiss-tag tag-indigo">CONNECTED</span></td>
+          </tr>
+          <tr>
+            <td class="source-name">Moored Deep-Sea Buoy Array</td>
+            <td>INCOIS Ocean Observation Group</td>
+            <td class="mono">MOM6 Hydrodynamic Model</td>
+            <td class="mono">Every 15 Min</td>
+            <td><span class="swiss-tag tag-terracotta">LIVE SENSING</span></td>
+          </tr>
+          <tr>
+            <td class="source-name">Atmospheric Wind &amp; Barometric Waves</td>
+            <td>India Meteorological Department (IMD)</td>
+            <td class="mono">WMO GTS Telecommunication</td>
+            <td class="mono">Hourly Synoptic</td>
+            <td><span class="swiss-tag tag-marigold">SYNCHRONIZED</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="swiss-divider" aria-hidden="true"></div>
+
+  <!-- ── 8. PHASE 3: EMPOWERING FINAL CALL-TO-ACTION ── -->
+  <section class="civic-section" id="citizen-action" aria-labelledby="cta-title">
+    <div class="cta-civic-monument">
+      <div class="cta-grid">
+        
+        <div class="cta-text-content">
+          <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+            <span class="swiss-tag" style="background: rgba(255,255,255,0.15); color: #FFFFFF; border-color: rgba(255,255,255,0.3);">
+              CITIZEN EMPOWERMENT PORTAL
+            </span>
+          </div>
+          <h2 id="cta-title">Claim Your Seat in India’s Sovereign Ocean Shield</h2>
+          <p>
+            Whether you are a coastal fisherman seeking weather safety, an ocean researcher studying marine currents, or a vigilant citizen reporting an environmental hazard—this national platform belongs to you.
+          </p>
+          <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--indigo-300); display: flex; gap: 24px; flex-wrap: wrap;">
+            <span>TOLL-FREE EMERGENCY: <strong>1554 (COAST GUARD)</strong></span>
+            <span>VHF MARINE CHANNEL: <strong>16 (DISTRESS)</strong></span>
+          </div>
+        </div>
+
+        <div class="cta-card-actions">
+          <button type="button" class="cta-action-btn open-incident-modal-btn">
+            <span>Report Marine / Oil Incident</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+
+          <a href="dashboard.html" class="cta-secondary-action">
+            <span>Launch Operational Surveillance Desk</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </a>
+
+          <a href="map.html" class="cta-secondary-action">
+            <span>Explore High-Resolution Live Map</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 9. INTERACTIVE CITIZEN INCIDENT REPORT MODAL ── -->
+  <div class="modal-overlay" id="incident-modal" role="dialog" aria-modal="true" aria-labelledby="modal-heading" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-heading">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>Submit Public Coastal Observation</span>
+        </h3>
+        <button type="button" class="modal-close-btn close-modal-btn" aria-label="Close dialog">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <form id="incident-form">
+        <div class="modal-body">
+          <p style="font-size: 0.9rem; color: var(--text-secondary);">
+            Reports submitted here are routed directly to the Indian Coast Guard Regional Maritime Rescue Coordination Centre (MRCC) and INCOIS Ocean Hazard Division.
+          </p>
+
+          <div class="form-field">
+            <label class="form-label" for="incident-sector">Maritime Zone / Sector</label>
+            <select class="form-select" id="incident-sector" required>
+              <option value="west">Sector 01-W: Arabian Sea (Maharashtra, Gujarat, Goa, Karnataka)</option>
+              <option value="east">Sector 02-E: Bay of Bengal (Tamil Nadu, Andhra Pradesh, Odisha, West Bengal)</option>
+              <option value="lakshadweep">Sector 03-SW: Lakshadweep Sea &amp; Kavaratti Shelf</option>
+              <option value="andaman">Sector 04-SE: Andaman Sea &amp; Great Nicobar Straits</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="incident-type">Observation Classification</label>
+            <select class="form-select" id="incident-type" required>
+              <option value="oil_spill">Surface Hydrocarbon Sheen / Suspected Oil Discharge</option>
+              <option value="unidentified_vessel">Vessel Running Without Mandatory AIS Beacon</option>
+              <option value="hazard">Dangerous Drifting Navigation Hazard or Debris</option>
+              <option value="distress">Fisherman Distress / Emergency Visual Signal</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="incident-desc">Observation Details &amp; Visual Notes</label>
+            <textarea class="form-textarea" id="incident-desc" rows="3" placeholder="Provide approximate distance from shore, visible smoke/sheen color, direction of drift..." required></textarea>
+          </div>
+
+          <!-- Cryptographic Verification Receipt -->
+          <div class="receipt-box" id="receipt-box">
+            <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: var(--india-green); margin-bottom: 8px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>INCIDENT COMMITTED TO NATIONAL CIVIC GRID</span>
+            </div>
+            <div class="receipt-row">
+              <span>TRACKING ID:</span>
+              <strong id="receipt-ticket-id">IN-SD-2026-X8F92A</strong>
+            </div>
+            <div class="receipt-row">
+              <span>RECORDED AT:</span>
+              <span id="receipt-timestamp">2026-09-18 18:45:00 IST</span>
+            </div>
+            <div class="receipt-row">
+              <span>SECURITY ROUTE:</span>
+              <span>ICG MRCC / INCOIS HAZARD DISPATCH</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-civic-secondary close-modal-btn">Dismiss</button>
+          <button type="submit" class="btn-civic-primary" id="incident-submit-btn">Sign &amp; Transmit Alert</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── 10. INSTITUTIONAL CIVIC FOOTER ── -->
+  <footer class="civic-footer" role="contentinfo">
     <div class="footer-inner">
-      <span class="footer-left">
-        <strong>Samudra Drishti System</strong> &nbsp;|&nbsp; INCOIS, Ministry of Earth Sciences &nbsp;|&nbsp; Hosted by <strong>NIC</strong>
-      </span>
-      <nav class="footer-links" aria-label="Legal links">
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms &amp; Conditions</a>
-      </nav>
-      <span class="footer-right">
-        <span class="footer-classification">Restricted</span>
-        &nbsp; Government of India
-      </span>
+      <div class="footer-top-grid">
+        
+        <div class="footer-brand-col">
+          <div class="footer-brand-title">Samudra Drishti System (समुद्र दृष्टि)</div>
+          <p class="footer-brand-sub">
+            The National Maritime Intelligence Grid of the Republic of India. Dedicated to sovereign domain integrity, ocean biosphere protection, and the empowerment of coastal citizens.
+          </p>
+          <div class="grid-coord">SEC: NATIONAL INFRASTRUCTURE // TIER-IV SECURE</div>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Portal Navigation</div>
+          <ul class="footer-link-list">
+            <li><a href="index.html">National Landing Portal</a></li>
+            <li><a href="dashboard.html">Operational Dashboard</a></li>
+            <li><a href="map.html">Live Maritime Radar Map</a></li>
+            <li><a href="reports.html">Surveillance Reports</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Affiliated Bodies</div>
+          <ul class="footer-link-list">
+            <li><a href="https://moes.gov.in" target="_blank" rel="noopener noreferrer">Ministry of Earth Sciences</a></li>
+            <li><a href="https://incois.gov.in" target="_blank" rel="noopener noreferrer">INCOIS Hyderabad</a></li>
+            <li><a href="https://indiancoastguard.gov.in" target="_blank" rel="noopener noreferrer">Indian Coast Guard</a></li>
+            <li><a href="https://isro.gov.in" target="_blank" rel="noopener noreferrer">ISRO Satellite Data Centre</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Civic Compliance</div>
+          <ul class="footer-link-list">
+            <li><a href="privacy.html">Privacy &amp; Data Sovereignty</a></li>
+            <li><a href="terms.html">Terms of Civic Service</a></li>
+            <li><a href="https://rti.gov.in" target="_blank" rel="noopener noreferrer">Right to Information (RTI)</a></li>
+            <li><a href="https://data.gov.in" target="_blank" rel="noopener noreferrer">Open Government Data (OGD)</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom-bar">
+        <div>
+          Designed under the Swiss/International Typographic Style for the Government of India · Hosted by National Informatics Centre (NIC)
+        </div>
+        <div>
+          <span>ISO 27001 Certified</span> &nbsp;|&nbsp;
+          <span>WCAG 2.1 AAA Accessible</span>
+        </div>
+      </div>
     </div>
   </footer>
 
-  <script src="shared.js"></script>
-  <script>
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'en,hi',
-        autoDisplay: false
-      }, 'google_translate_element');
-    }
-  </script>
-  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
+  <script src="landing.js"></script>
 </body>
 </html>

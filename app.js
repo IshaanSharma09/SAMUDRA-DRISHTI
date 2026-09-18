@@ -271,7 +271,7 @@ setInterval(updateEnvTime, 60000);
 // ─── INTERCEPT BUTTON INTERACTION ────────────────────────────
 const interceptBtn = document.getElementById('btn-intercept-poseidon');
 interceptBtn && interceptBtn.addEventListener('click', () => {
-  interceptBtn.textContent = '⚡ ORDER SENT';
+  interceptBtn.textContent = 'ORDER TRANSMITTED';
   interceptBtn.style.background = '#dc2626';
   interceptBtn.style.color = '#fff';
   interceptBtn.style.borderColor = '#dc2626';
@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateClock();
   updateZoomDisplay();
   updateSlider(0);
-  console.log('%c🌊 SAMUDRA DRISHTI v2.4 — OPERATIONAL', 'color:#FF9933;font-weight:bold;font-size:14px;');
+  console.log('%cSAMUDRA DRISHTI v2.4 — OPERATIONAL', 'color:#FF9933;font-weight:bold;font-size:14px;');
   console.log('%cNational Technical Research Organisation (NTRO)', 'color:#94a3b8;font-size:12px;');
   console.log('%cAI-Driven Maritime Spill Detection & Vessel Tracking', 'color:#60A5FA;font-size:11px;');
 });

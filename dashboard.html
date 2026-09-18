@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Samudra Drishti System</title>
+  <meta name="description" content="Samudra Drishti: AI-Driven Maritime Spill Detection and Vessel Tracking — Government of India, Ministry of Earth Sciences." />
+
+  <!-- Flash prevention: restore dark theme before first paint to prevent flash -->
+  <script>(function(){try{var t=localStorage.getItem('sd-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})()</script>
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Open Graph & Social Metadata -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Operational Surveillance Desk — Samudra Drishti" />
+  <meta property="og:description" content="AI-driven maritime domain awareness, live satellite radar ingest, and real-time EEZ vessel tracking for the Government of India." />
+  <meta property="og:image" content="maritime_radar.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Operational Surveillance Desk — Samudra Drishti" />
+  <meta name="twitter:description" content="AI-driven maritime domain awareness, live satellite radar ingest, and real-time EEZ vessel tracking." />
+  <meta name="twitter:image" content="maritime_radar.jpg" />
+
+  <link rel="stylesheet" href="landing.css" />
+  <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Ambient Modernist Civic Hall Skylight Glow -->
+  <div class="ambient-sunlight" aria-hidden="true"></div>
+
+  <!-- Indian Tricolor Precision Micro-Strip -->
+  <div class="tricolor-strip-precision" aria-hidden="true">
+    <div class="tc-kesari"></div>
+    <div class="tc-white"></div>
+    <div class="tc-green"></div>
+  </div>
+
+  <!-- ── 1. INSTITUTIONAL CIVIC MASTHEAD & WAYFINDING ── -->
+  <header class="civic-masthead">
+    <div class="masthead-inner">
+      
+      <!-- Brand & State Emblem -->
+      <a href="index.html" class="masthead-identity" aria-label="Samudra Drishti Home">
+        <img src="emblem.png" alt="State Emblem of India" class="masthead-emblem" />
+        <div class="identity-separator" aria-hidden="true"></div>
+        <div class="identity-text">
+          <span class="identity-name-devanagari">समुद्र दृष्टि</span>
+          <span class="identity-name-english">SAMUDRA DRISHTI</span>
+          <span class="identity-sub">Government of India · MoES &amp; INCOIS</span>
+        </div>
+      </a>
+
+      <!-- Swiss Wayfinding Navigation -->
+      <nav class="masthead-nav" aria-label="Civic Navigation">
+        <a href="index.html"     class="nav-anchor"><span class="nav-idx">01</span> National Portal</a>
+        <a href="dashboard.html" class="nav-anchor nav-active" aria-current="page"><span class="nav-idx">02</span> Dashboard</a>
+        <a href="map.html"       class="nav-anchor"><span class="nav-idx">03</span> Live Map</a>
+        <a href="reports.html"   class="nav-anchor"><span class="nav-idx">04</span> Intelligence Reports</a>
+        <a href="index.html#telemetry" class="nav-anchor"><span class="nav-idx">05</span> Coastal Inspector</a>
+      </nav>
+
+      <!-- Mechanical Action Switchers -->
+      <div class="masthead-controls">
+        <!-- Sound Micro-Feedback Switch -->
+        <button id="sound-toggle" class="tactile-switch-btn" type="button" aria-pressed="false" title="Toggle Tactile Audio Feedback" aria-label="Toggle Tactile Audio Feedback">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        </button>
+
+        <!-- Modernist Theme Switch (Sunlit Hall / Deep Indigo) -->
+        <button id="theme-toggle" class="tactile-switch-btn" type="button" title="Toggle Dark/Light Mode" aria-label="Toggle Dark/Light Mode">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+
+        <!-- Direct Link to Operational Console -->
+        <a href="dashboard.html" class="btn-civic-primary" aria-label="Enter Operations Console">
+          <span>Ops Console</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="7" y1="17" x2="17" y2="7"></line>
+            <polyline points="7 7 17 7 17 17"></polyline>
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ── 2. REAL-TIME NATIONAL TELEMETRY STATUS BANNER ── -->
+  <aside class="civic-telemetry-banner" aria-label="National Telemetry Status">
+    <div class="banner-inner">
+      <div class="telemetry-item">
+        <span class="live-indicator-dot" aria-hidden="true"></span>
+        <span>NATIONAL SURVEILLANCE GRID: <strong>ACTIVE &amp; NOMINAL</strong></span>
+      </div>
+
+      <div class="telemetry-items">
+        <div class="telemetry-item">
+          <span class="telemetry-label">SOVEREIGN EEZ:</span>
+          <span class="telemetry-val">2,372,000 KM²</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">COASTLINE SHIELD:</span>
+          <span class="telemetry-val">7,516 KM</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">ACTIVE AIS TRACKS:</span>
+          <span class="telemetry-val">3,248 VESSELS</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">NEXT SAR PASS:</span>
+          <span class="telemetry-val mono" id="sat-countdown-timer">T-04:18</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="page-main" id="main-content">
+
+    <!-- Page header -->
+    <div class="page-top">
+      <div>
+        <h1 class="page-title">Dashboard Overview</h1>
+        <p class="page-sub">Maritime domain awareness — live system status for Indian EEZ</p>
+      </div>
+      <div class="page-top-right">
+        <span class="data-source-badge">Data source: Standby</span>
+      </div>
+    </div>
+
+    <!-- ── METRIC CARDS ── -->
+    <section aria-label="Key surveillance metrics">
+      <div class="metrics-row">
+
+        <a href="map.html" class="metric-card reveal stagger-1" aria-label="Active spills detected: 0. View Live Map.">
+          <div class="metric-icon-wrap metric-icon-a">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="metric-body">
+            <div class="metric-value" id="metric-spills">0</div>
+            <div class="metric-label">Active Spills Detected</div>
+            <div class="metric-sub">No events this pass</div>
+          </div>
+        </a>
+
+        <a href="reports.html" class="metric-card reveal stagger-2" aria-label="Total estimated volume: 0 litres. View Reports.">
+          <div class="metric-icon-wrap metric-icon-b">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M12 2C6 2 2 7.6 2 12a10 10 0 0 0 20 0c0-4.4-4-10-10-10z"/>
+            </svg>
+          </div>
+          <div class="metric-body">
+            <div class="metric-value">0 <span class="metric-unit">L</span></div>
+            <div class="metric-label">Estimated Spill Volume</div>
+            <div class="metric-sub">Awaiting SAR analysis</div>
+          </div>
+        </a>
+
+        <a href="map.html" class="metric-card reveal stagger-3" aria-label="Vessels tracked: 1420. View Live Map.">
+          <div class="metric-icon-wrap metric-icon-c">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M3 17l4-8 4 4 4-6 4 10H3z"/>
+              <line x1="3" y1="21" x2="21" y2="21"/>
+            </svg>
+          </div>
+          <div class="metric-body">
+            <div class="metric-value" id="metric-vessels">1,420</div>
+            <div class="metric-label">Vessels in AIS Stream</div>
+            <div class="metric-sub">Packet stream active</div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ── UPCOMING SATELLITE PASSES ── -->
+    <section class="sat-section reveal stagger-4" aria-label="Upcoming satellite surveillance passes">
+      <h2 class="section-heading">Upcoming Satellite Surveillance Passes</h2>
+      <div class="sat-grid">
+
+        <article class="sat-card">
+          <div class="sat-card-top">
+            <div>
+              <h3 class="sat-name">Sentinel-1A</h3>
+              <p class="sat-sensor">C-SAR &mdash; Synthetic Aperture Radar</p>
+            </div>
+            <span class="pill-badge pill-scheduled"><span class="pill-dot"></span>Scheduled</span>
+          </div>
+          <dl class="sat-meta">
+            <div><dt>Pass Location</dt><dd>IN-EEZ Sector 2</dd></div>
+            <div><dt>ETA</dt><dd class="sat-eta">42 min</dd></div>
+          </dl>
+        </article>
+
+        <article class="sat-card">
+          <div class="sat-card-top">
+            <div>
+              <h3 class="sat-name">Sentinel-2B</h3>
+              <p class="sat-sensor">MSI &mdash; Multi-Spectral Instrument</p>
+            </div>
+            <span class="pill-badge pill-normal"><span class="pill-dot"></span>Normal</span>
+          </div>
+          <dl class="sat-meta">
+            <div><dt>Pass Location</dt><dd>Arabian Sea, South</dd></div>
+            <div><dt>ETA</dt><dd class="sat-eta">2 h 15 min</dd></div>
+          </dl>
+          <span class="sat-note-badge">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3.5 8.5l3 3 6-6"/></svg>
+            Cloud-cover check passed
+          </span>
+        </article>
+
+        <article class="sat-card">
+          <div class="sat-card-top">
+            <div>
+              <h3 class="sat-name">RISAT-1A</h3>
+              <p class="sat-sensor">Radar &mdash; C-Band SAR</p>
+            </div>
+            <span class="pill-badge pill-standby"><span class="pill-dot"></span>Standby</span>
+          </div>
+          <dl class="sat-meta">
+            <div><dt>Pass Location</dt><dd>Bay of Bengal, Coast</dd></div>
+            <div><dt>ETA</dt><dd class="sat-eta">5 h 10 min</dd></div>
+          </dl>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ── SYSTEM TELEMETRY ── -->
+    <section class="telemetry-section reveal stagger-5" aria-label="System audit and telemetry log">
+      <div class="telemetry-title-row">
+        <h2 class="section-heading">System Telemetry &amp; Audit Stream</h2>
+        <span class="telemetry-live-tag"><span class="pill-dot"></span>Live Pipeline Log</span>
+      </div>
+      <div class="telemetry-log" role="log" aria-live="polite" aria-label="Audit log entries">
+        <div class="telemetry-window-bar">
+          <div class="telemetry-dots" aria-hidden="true">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <span class="telemetry-console-title">samudra-drishti &mdash; audit-pipeline.log</span>
+        </div>
+        <div class="telemetry-body">
+          <div class="telemetry-line">
+            <span class="telemetry-ts">08:45 IST</span>
+            <span class="telemetry-msg">Copernicus API handshake <span class="telemetry-ok">verified</span> — session token authenticated</span>
+          </div>
+          <div class="telemetry-line">
+            <span class="telemetry-ts">08:52 IST</span>
+            <span class="telemetry-msg">SDD-ResNet weight checksum <span class="telemetry-ok">passed</span> — inference model ready</span>
+          </div>
+          <div class="telemetry-line">
+            <span class="telemetry-ts">09:04 IST</span>
+            <span class="telemetry-msg">Scene scheduler queued — next pass: <span class="telemetry-highlight">Sentinel-1A / IN-EEZ Sector 2</span></span>
+          </div>
+          <div class="telemetry-line">
+            <span class="telemetry-ts">09:12 IST</span>
+            <span class="telemetry-msg">AIS raw packet stream connected — <span class="telemetry-ok">1,420 vessels</span> in active tracking window</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── STATUS BANNER ── -->
+    <section class="status-banner reveal stagger-4" aria-live="polite">
+      <div class="status-banner-inner">
+        <div class="status-banner-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <div>
+          <p class="status-banner-msg">System operational. Monitoring Indian Exclusive Economic Zone (EEZ).</p>
+          <p class="status-banner-sub">Last check: <span id="last-check-time" aria-live="polite">--:-- IST</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DATA FEED STATUS ── -->
+    <section aria-label="Data feed connection status">
+      <h2 class="section-heading">Data Feed Status</h2>
+      <div class="conn-table-wrap">
+        <table class="conn-table" role="table">
+          <thead>
+            <tr>
+              <th scope="col">Feed</th>
+              <th scope="col">Provider</th>
+              <th scope="col">Status</th>
+              <th scope="col">Last Contact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SAR Imagery (Sentinel-1)</td>
+              <td>ESA Copernicus Open Access Hub</td>
+              <td><span class="conn-badge pill-scheduled"><span class="pill-dot"></span>Scheduled</span></td>
+              <td class="mono">09:04 IST</td>
+            </tr>
+            <tr>
+              <td>AIS Vessel Feed</td>
+              <td>INCOIS / MarineTraffic</td>
+              <td><span class="conn-badge pill-operational"><span class="pill-dot"></span>Connected</span></td>
+              <td class="mono">09:12 IST</td>
+            </tr>
+            <tr>
+              <td>Ocean Current Data</td>
+              <td>INCOIS MOM6 Model</td>
+              <td><span class="conn-badge pill-operational"><span class="pill-dot"></span>Active</span></td>
+              <td class="mono">09:10 IST</td>
+            </tr>
+            <tr>
+              <td>Wind &amp; Weather</td>
+              <td>ECMWF ERA-5</td>
+              <td><span class="conn-badge pill-operational"><span class="pill-dot"></span>Active</span></td>
+              <td class="mono">09:15 IST</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <span class="footer-left">
+        <strong>Samudra Drishti System</strong> &nbsp;|&nbsp; INCOIS, Ministry of Earth Sciences &nbsp;|&nbsp; Hosted by <strong>NIC</strong>
+      </span>
+      <nav class="footer-links" aria-label="Legal links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+      </nav>
+      <span class="footer-right">
+        <span class="footer-classification">Restricted</span>
+        &nbsp; Government of India
+      </span>
+    </div>
+  </footer>
+
+  <script src="shared.js"></script>
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,hi',
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
+</body>
+</html>
