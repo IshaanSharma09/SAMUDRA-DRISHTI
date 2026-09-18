@@ -1,0 +1,61 @@
+databases:
+  - name: samundra-postgres
+    databaseName: samundra_drishti
+    user: postgres
+    plan: free
+    region: oregon
+
+services:
+  # =======================================================
+  # 1. FRONTEND: NATIONAL MARITIME SURVEILLANCE PORTAL
+  # =======================================================
+  - type: web
+    name: samundra-drishti-portal
+    env: static
+    plan: free
+    region: oregon
+    buildCommand: ""
+    staticPublishPath: ./
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+  # =======================================================
+  # 2. BACKEND: FASTAPI CLOUD API
+  # =======================================================
+  - type: web
+    name: samundra-drishti-backend
+    env: python
+    plan: free
+    region: oregon
+    rootDir: backend
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: samundra-postgres
+          property: connectionString
+      - key: REDIS_URL_OVERRIDE
+        fromService:
+          type: redis
+          name: samundra-redis
+          property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: COOKIE_SAMESITE
+        value: "strict"
+
+  # =======================================================
+  # 3. CACHE & THROTTLE: MANAGED REDIS
+  # =======================================================
+  - type: redis
+    name: samundra-redis
+    plan: free
+    region: oregon
+    ipAllowList: [] # Private internal access only
