@@ -12,8 +12,7 @@ services:
   - type: web
     name: samundra-drishti-portal
     env: static
-    plan: free
-    # Note: 'region' omitted because Render serves static sites on their Global CDN
+    # Static sites on Render are automatically free and served via Global CDN
     buildCommand: ""
     staticPublishPath: ./
 
